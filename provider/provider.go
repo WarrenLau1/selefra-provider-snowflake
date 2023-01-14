@@ -3,6 +3,7 @@ package provider
 import (
 	"context"
 	"github.com/selefra/selefra-provider-snowflake/snowflake_client"
+	"os"
 
 	"github.com/selefra/selefra-provider-sdk/provider"
 	"github.com/selefra/selefra-provider-sdk/provider/schema"
@@ -27,6 +28,54 @@ func GetProvider() *provider.Provider {
 
 				if len(snowflakeConfig.Providers) == 0 {
 					snowflakeConfig.Providers = append(snowflakeConfig.Providers, snowflake_client.Config{})
+				}
+
+				if snowflakeConfig.Providers[0].Account == "" {
+					snowflakeConfig.Providers[0].Account = os.Getenv("SNOWFLAKE_ACCOUNT")
+				}
+
+				if snowflakeConfig.Providers[0].Account == "" {
+					return nil, schema.NewDiagnostics().AddErrorMsg("missing Account in configuration")
+				}
+
+				if snowflakeConfig.Providers[0].Region == "" {
+					snowflakeConfig.Providers[0].Region = os.Getenv("SNOWFLAKE_REGION")
+				}
+
+				if snowflakeConfig.Providers[0].Region == "" {
+					return nil, schema.NewDiagnostics().AddErrorMsg("missing Region in configuration")
+				}
+
+				if snowflakeConfig.Providers[0].Role == "" {
+					snowflakeConfig.Providers[0].Role = os.Getenv("SNOWFLAKE_ROLE")
+				}
+
+				if snowflakeConfig.Providers[0].Role == "" {
+					return nil, schema.NewDiagnostics().AddErrorMsg("missing Role in configuration")
+				}
+
+				if snowflakeConfig.Providers[0].User == "" {
+					snowflakeConfig.Providers[0].User = os.Getenv("SNOWFLAKE_USER")
+				}
+
+				if snowflakeConfig.Providers[0].User == "" {
+					return nil, schema.NewDiagnostics().AddErrorMsg("missing User in configuration")
+				}
+
+				if snowflakeConfig.Providers[0].Password == "" {
+					snowflakeConfig.Providers[0].Password = os.Getenv("SNOWFLAKE_PASSWORD")
+				}
+
+				if snowflakeConfig.Providers[0].Password == "" {
+					return nil, schema.NewDiagnostics().AddErrorMsg("missing Password in configuration")
+				}
+
+				if snowflakeConfig.Providers[0].Warehouse == "" {
+					snowflakeConfig.Providers[0].Warehouse = os.Getenv("SNOWFLAKE_WAREHOUSE")
+				}
+
+				if snowflakeConfig.Providers[0].Warehouse == "" {
+					return nil, schema.NewDiagnostics().AddErrorMsg("missing Warehouse in configuration")
 				}
 
 				clients, err := snowflake_client.NewClients(snowflakeConfig)
@@ -63,10 +112,6 @@ func GetProvider() *provider.Provider {
 
 				if err != nil {
 					return schema.NewDiagnostics().AddErrorMsg("analysis config err: %s", err.Error())
-				}
-
-				if len(snowflakeConfig.Providers) == 0 {
-					return schema.NewDiagnostics().AddErrorMsg("analysis config err: no configuration")
 				}
 
 				return nil
