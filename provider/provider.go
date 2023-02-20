@@ -38,14 +38,6 @@ func GetProvider() *provider.Provider {
 					return nil, schema.NewDiagnostics().AddErrorMsg("missing Account in configuration")
 				}
 
-				if snowflakeConfig.Providers[0].Region == "" {
-					snowflakeConfig.Providers[0].Region = os.Getenv("SNOWFLAKE_REGION")
-				}
-
-				if snowflakeConfig.Providers[0].Region == "" {
-					return nil, schema.NewDiagnostics().AddErrorMsg("missing Region in configuration")
-				}
-
 				if snowflakeConfig.Providers[0].Role == "" {
 					snowflakeConfig.Providers[0].Role = os.Getenv("SNOWFLAKE_ROLE")
 				}
@@ -98,8 +90,7 @@ func GetProvider() *provider.Provider {
 		},
 		ConfigMeta: provider.ConfigMeta{
 			GetDefaultConfigTemplate: func(ctx context.Context) string {
-				return `# account: "<YOUR_ACCOUNT>"
-# region: "<YOUR_REGION>"
+				return `# account: "<YOUR_ACCOUNT>" 
 # role: "<YOUR_ROLE>"
 # user: "<YOUR_USERNAME>"
 # password: "<YOUR_USER_PASSWORD>"
