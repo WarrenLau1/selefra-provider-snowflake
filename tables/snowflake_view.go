@@ -56,8 +56,9 @@ func (x *TableSnowflakeViewGenerator) GetDataSource() *schema.DataSource {
 				var text sql.NullString
 				var isSecure sql.NullString
 				var isMaterialized sql.NullString
+				var isOff sql.NullString
 
-				err = rows.Scan(&createdOn, &name, &reserved, &databaseName, &schemaName, &owner, &comment, &text, &isSecure, &isMaterialized)
+				err = rows.Scan(&createdOn, &name, &reserved, &databaseName, &schemaName, &owner, &comment, &text, &isSecure, &isMaterialized, &isOff)
 				if err != nil {
 					return schema.NewDiagnosticsErrorPullTable(task.Table, err)
 				}
@@ -76,7 +77,9 @@ func (x *TableSnowflakeViewGenerator) GetDataSource() *schema.DataSource {
 					var text sql.NullString
 					var isSecure sql.NullString
 					var isMaterialized sql.NullString
-					err = rows.Scan(&createdOn, &name, &reserved, &databaseName, &schemaName, &owner, &comment, &text, &isSecure, &isMaterialized)
+					var isOff sql.NullString
+
+					err = rows.Scan(&createdOn, &name, &reserved, &databaseName, &schemaName, &owner, &comment, &text, &isSecure, &isMaterialized, &isOff)
 					if err != nil {
 						return schema.NewDiagnosticsErrorPullTable(task.Table, err)
 					}
